@@ -1,6 +1,6 @@
 <template lang="pug">
   .tasklist(v-if="tasks.length > 0")
-    .task-item(v-for="(task, index) in tasks"  v-on:dblclick="viewTaskDetails(index)")
+    .task-item(v-for="(task, index) in tasks" :class="[currentTaskIndex !== false && currentTaskIndex === index ? 'active' : '']" :key="'task-'+index" v-on:dblclick="viewTaskDetails(index)")
       input.task-item-checkbox(type="checkbox")
       label.task-item-name {{ task.name }}
   .no-task-msg(v-else) No tasks inserts yet.
@@ -14,11 +14,15 @@ export default {
   computed: {
     tasks () {
       return this.$store.getters.getTasks
+    },
+    currentTaskIndex () {
+      return this.$store.getters.currentTaskIndex
     }
   },
   methods: {
     viewTaskDetails (taskIndex) {
       this.$store.dispatch('setCurrentTask', taskIndex)
+      this.$parent.$emit('open-task-detail')
     }
   }
 }
@@ -36,6 +40,10 @@ export default {
       align-items: center;
       margin-bottom: 2px;
       cursor: pointer;
+
+      &.active {
+        background: $light-blue;
+      }
 
       .task-item-checkbox {
         width: 20px;

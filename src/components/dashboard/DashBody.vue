@@ -1,7 +1,7 @@
 <template lang="pug">
   .dashboard-body
     .dash-toolbar
-      label Work
+      label.work-name {{ workName }}
     .dash-content
       .add-todo-wrapper
         img.add-todo-icon(src="./assets/add.svg")
@@ -19,6 +19,11 @@ export default {
   components: {
     TaskList
   },
+  computed: {
+    workName () {
+      return this.$store.getters.getWorkName
+    }
+  },
   methods: {
     addTask (e) {
       this.$store.dispatch('addTask', {
@@ -35,12 +40,20 @@ export default {
     width: calc(100% - 280px);
     height: 100vh;
     background: url('./assets/06.jpg');
-    background-position: bottom right;
+    background-position: left top;
 
     .dash-toolbar {
       background: $green;
       height: 45px;
       width: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 15px;
+
+      .work-name {
+        font-size: 20px;
+        color: $white;
+      }
     }
 
     .dash-content {

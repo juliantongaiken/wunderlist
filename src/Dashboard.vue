@@ -1,8 +1,8 @@
 <template lang="pug">
-  .dashboard(@toggleTaskDetail="toggleTaskDetail")
+  .dashboard(@click="closeTaskDetail")
     Sidebar.sidebar
-    DashBody.dash-body#dash-body
-    TaskDetail.task-detail.active#task-detail
+    DashBody.dash-body#dash-body(:class="[isTaskDetailOpen ? 'active' : '']")
+    TaskDetail.task-detail#task-detail(:class="[isTaskDetailOpen ? 'active' : '']")
 </template>
 
 <script>
@@ -21,14 +21,17 @@ export default {
     DashBody,
     TaskDetail
   },
+  computed: {
+    isTaskDetailOpen () {
+      return this.$store.getters.getTaskDetailOpen
+    }
+  },
   methods: {
-    toggleTaskDetail () {
-      var dashBody = document.getElementById('dash-body')
+    closeTaskDetail (e) {
       var taskDetail = document.getElementById('task-detail')
-
-      dashBody.classList.toggle('active')
-      taskDetail.classList.toggle('active')
-      this.taskDetailOpen = !this.taskDetailOpen
+      if (!taskDetail.contains(e.target)) {
+        this.$store.dispatch('closeTaskDetail')
+      }
     }
   }
 }
